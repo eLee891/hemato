@@ -1,0 +1,104 @@
+/* hemato/app/globals.css */
+@import "tailwindcss";
+
+:root {
+  --font-classico: "classico-urw", sans-serif;
+  --hemato-red: #5C1A1A;
+  --hemato-white: #FAFAFA; /* Very subtle off-white for background contrast */
+}
+
+/* 1. FIX NAVIGATION VISIBILITY */
+/* This ensures the nav is visible against the white background */
+.nav-container {
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Nearly invisible but defines the edge */
+  transition: all 0.3s ease;
+}
+
+/* 2. BASE RESET */
+html, body {
+  font-family: var(--font-classico);
+  background-color: white; /* Keep the base pure white */
+  color: #1A1A1A;
+}
+
+*, html, body, nav, footer, button, a, input {
+  font-family: var(--font-classico) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3. CALENDAR & EVENT SPECIFIC STYLING */
+
+/* Ensure the Events page has enough room for the fixed navbar */
+.events-page-wrapper {
+  padding-top: 180px; /* High padding so content starts below nav */
+}
+
+/* Red Date Numbers (03/29) */
+.date-highlight {
+  color: var(--hemato-red);
+  font-size: 2.25rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* FullCalendar Navigation Overrides */
+.fc .fc-toolbar-title {
+  font-family: var(--font-classico) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 1.1rem !important;
+}
+
+.fc .fc-button {
+  background: transparent !important;
+  border: none !important;
+  color: #a1a1aa !important;
+  text-transform: uppercase !important;
+  font-size: 9px !important;
+  letter-spacing: 0.15em;
+}
+
+.fc .fc-button:hover {
+  color: #000 !important;
+}
+
+/* Section Header with the thin line */
+.section-title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Custom utility for the "Floating" effect */
+.nav-active {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Ensure your font is applied to the Nav Links specifically */
+nav a {
+  font-family: var(--font-classico) !important;
+  transition: opacity 0.3s ease;
+}
+
+.title-line {
+  height: 1px;
+  width: 40px;
+  background-color: var(--hemato-red);
+  opacity: 0.3;
+}
+
+/* The "Browse Collection" Underline Style */
+.elegant-link {
+  color: var(--hemato-red);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(92, 26, 26, 0.2);
+  padding-bottom: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.elegant-link:hover {
+  border-bottom-color: var(--hemato-red);
+}
