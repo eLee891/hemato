@@ -4,12 +4,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, User } from "lucide-react";
-import { useSession, signOut } from "next-auth/react"; // 추가
+import { useSession, signOut } from "next-auth/react";
+import { useCart } from "@/app/context/CartContext"; 
 
 export default function Navbar() {
-  const { data: session, status } = useSession(); // 세션 정보 가져오기
+  const { data: session, status } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  
+  // Connect to the Cart Brain
+  const { cart, setIsOpen } = useCart();
 
   const colors = {
     primary: "#2C2825",    // Soft Espresso
@@ -19,8 +23,7 @@ export default function Navbar() {
   };
 
   const isHomePage = pathname === "/";
-  const isShopPage = pathname?.startsWith("/shop");
-  const isDarkText = !isHomePage || isScrolled || isShopPage;
+  const isDarkText = !isHomePage || isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +38,7 @@ export default function Navbar() {
       className={`fixed top-0 w-full z-[100] px-6 md:px-12 h-24 flex items-center transition-all duration-700 ${
         !isDarkText 
           ? "bg-transparent text-white" 
-          : "backdrop-blur-md border-b"
+          : "backdrop-blur-md border-b shadow-sm" 
       }`}
       style={{ 
         backgroundColor: isDarkText ? `${colors.background}f2` : "transparent",
@@ -67,7 +70,6 @@ export default function Navbar() {
             <Link href="/shop" className="hover:opacity-50 transition-opacity">Shop</Link>
             <Link href="/events" className="hover:opacity-50 transition-opacity">Events</Link>
             <Link href="/donate" className="hover:opacity-50 transition-opacity">Donate</Link>
-            {/* Membership 페이지 링크 추가 */}
             <Link href="/membership" className="hover:opacity-50 transition-opacity font-medium">Membership</Link>
           </div>
         </div>
@@ -78,15 +80,27 @@ export default function Navbar() {
             <Link href="/account" className="hover:opacity-40 transition-opacity">
               <User className="w-4 h-4 stroke-[1.2px]" />
             </Link>
-            <Link href="/cart" className="hover:opacity-40 transition-opacity relative">
+            
+            {/* --- UPDATED CART ICON SECTION --- */}
+            <button 
+              onClick={() => setIsOpen(true)} 
+              className="hover:opacity-40 transition-opacity relative cursor-pointer"
+            >
               <ShoppingBag className="w-4 h-4 stroke-[1.2px]" />
-              <span className="absolute -top-1.5 -right-1.5 text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-light" style={{ backgroundColor: isDarkText ? colors.primary : "white", color: isDarkText ? "white" : "black" }}>
-                0
+              {/* Dynamic Badge: Only shows if items > 0, or shows 0 if you prefer */}
+              <span 
+                className="absolute -top-1.5 -right-1.5 text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-bold" 
+                style={{ 
+                  backgroundColor: isDarkText ? colors.primary : "white", 
+                  color: isDarkText ? "white" : "black" 
+                }}
+              >
+                {cart.length}
               </span>
-            </Link>
+            </button>
+            {/* --------------------------------- */}
           </div>
           
-          {/* 로그인 상태에 따른 버튼 변화 */}
           {status === "loading" ? (
             <div className="w-24 h-8 animate-pulse bg-current opacity-10"></div>
           ) : session ? (

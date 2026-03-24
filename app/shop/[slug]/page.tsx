@@ -1,122 +1,141 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
+import { useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+// Go up two levels (out of [slug], then out of shop) to reach 'app'
+import { useCart } from "../../context/CartContext";
+
+const products = {
+  "farm-hoodie": {
+    title: "FARM HOODIE",
+    price: 85.00,
+    description: "For every rise. Our Farm Hoodies are made to last. Crafted from premium heavyweight fleece with a structured fit and brushed interior, they are designed for the farm and the kitchen alike. A thoughtful foundation for your everyday wardrobe.",
+    images: ["/farm-hoodie-front.jpg", "/farm-hoodie-back.jpg"] 
+  },
+  "farm-hoodie-blue": {
+    title: "FARM HOODIE — BLUE",
+    price: 85.00,
+    description: "The Hemato Farm Edition hoodie in a vibrant blue. A sturdy yet soft companion for early mornings and late sunsets.",
+    images: ["/farm-hoodie-blue-front.jpg", "/farm-hoodie-blue-back.jpg"]
+  }
+};
 
 export default function ProductDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const product = products[slug as keyof typeof products];
+  
+  const { addToCart } = useCart(); // Hook into the Cart logic
+  const [selectedSize, setSelectedSize] = useState("M");
   const [quantity, setQuantity] = useState(1);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
 
-  const product = {
-    title: "Saliva Book",
-    price: "$105.00",
-    image: "/saliva-book-cover.jpg", 
-    description: "Through various examples backed by medical illustrations and facts on how the body functions, the Saliva book explains how the most familiar fluid in our body plays an important role.",
-    quote: "Through saliva, we are able to maintain the blood. Saliva has the ability to revive the blood, within which is the life of the flesh."
-  };
+  if (!product) return <div className="pt-40 text-center font-light">Product not found.</div>;
 
-  useEffect(() => {
-    if (showSuccess) {
-      const timer = setTimeout(() => {
-        setShowSuccess(false);
-        setIsAdding(false);
-      }, 5000); 
-      return () => clearTimeout(timer);
-    }
-  }, [showSuccess]);
-
+  // Function to handle the Add to Cart click
   const handleAddToCart = () => {
-    setIsAdding(true);
-    setShowSuccess(true);
+    // We pass the product info, selected size, and the quantity
+    for (let i = 0; i < quantity; i++) {
+      addToCart({
+        ...product,
+        image: product.images[0], // Use the first image for the cart thumbnail
+        id: slug
+      }, selectedSize);
+    }
   };
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-40 px-6 md:px-16 relative overflow-x-hidden">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-20">
+    <main className="min-h-screen bg-[#FDFCF9] text-[#1A2233] pt-32 pb-20 px-6 md:px-16">
+      
+      {/* 1. BREADCRUMB */}
+      <nav className="mb-8 text-[12px] font-light tracking-wide text-zinc-500">
+        <Link href="/" className="hover:text-black">Home</Link>
+        <span className="mx-2">/</span>
+        <Link href="/shop" className="hover:text-black">Shop</Link>
+        <span className="mx-2">/</span>
+        <span className="text-black opacity-60">{product.title}</span>
+      </nav>
+
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
         
-        {/* LEFT: IMAGE */}
-        <div className="lg:col-span-7">
-          <div className="aspect-[4/5] flex items-center justify-center bg-[#F9F9F9] overflow-hidden group">
-            <img 
-              src={product.image} 
-              className="max-h-[80%] w-auto object-contain drop-shadow-2xl transition-transform duration-1000 group-hover:scale-105" 
-              alt="Book"
+        {/* LEFT: IMAGE GALLERY */}
+        <div className="lg:col-span-7 flex flex-col gap-4">
+          <div className="aspect-[4/5] w-full bg-[#F2F0EB] overflow-hidden">
+            <motion.img 
+              key={activeImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              src={product.images[activeImage]} 
+              className="w-full h-full object-cover" 
             />
+          </div>
+          <div className="flex gap-2">
+            {product.images.map((img, idx) => (
+              <button 
+                key={idx} 
+                onClick={() => setActiveImage(idx)}
+                className={`w-24 aspect-square bg-[#F2F0EB] border-2 transition-all cursor-pointer ${activeImage === idx ? 'border-black' : 'border-transparent'}`}
+              >
+                <img src={img} className="w-full h-full object-cover" />
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* RIGHT: TEXT */}
-        <div className="lg:col-span-5 flex flex-col pt-4">
-          <nav className="text-[11px] uppercase tracking-[0.5em] text-zinc-400 mb-12">
-            Shop / <span className="text-zinc-900 font-bold">Publications</span>
-          </nav>
+        {/* RIGHT: PRODUCT INFO */}
+        <div className="lg:col-span-5 flex flex-col pt-2">
+          <h1 className="text-[42px] font-bold tracking-tight mb-2 uppercase">{product.title}</h1>
+          <div className="text-[22px] font-medium mb-1">${product.price.toFixed(2)}</div>
+          <p className="text-[12px] text-zinc-500 mb-6 italic">Shipping calculated at checkout.</p>
+          
+          <hr className="border-t-2 border-black mb-8 w-full" />
 
-          <h1 className="text-7xl md:text-8xl font-light tracking-tighter uppercase mb-6 text-zinc-900 leading-[0.85]">
-            {product.title}
-          </h1>
-          
-          <p className="text-3xl text-zinc-400 font-extralight mb-16 italic tracking-tight">
-            {product.price}
-          </p>
-          
-          <div className="space-y-12 mb-20">
-            <p className="text-zinc-500 font-light leading-relaxed text-xl tracking-tight max-w-md">
-              {product.description}
-            </p>
-            
-            <div className="py-2">
-              <p className="italic font-serif text-3xl md:text-4xl text-zinc-800 leading-[1.3] tracking-tight">
-                “{product.quote}”
-              </p>
+          {/* SIZE SELECTION */}
+          <div className="mb-8">
+            <span className="text-[13px] font-bold uppercase tracking-widest block mb-4">Size</span>
+            <div className="flex gap-2">
+              {["S", "M", "L", "XL"].map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`px-6 py-3 text-[13px] border transition-all cursor-pointer ${
+                    selectedSize === size 
+                      ? "border-black bg-black text-white" 
+                      : "border-zinc-300 hover:border-black"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* ACTION AREA - NO OVERLAP */}
-          <div className="flex flex-col gap-16"> {/* Gap-16 ensures a huge space between button and message */}
-            <div className="flex gap-4">
-              <div className="flex border border-zinc-200 px-8 py-5 items-center gap-10">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-zinc-400 hover:text-zinc-900 cursor-pointer text-xl">-</button>
-                <span className="font-medium text-lg w-4 text-center">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="text-zinc-400 hover:text-zinc-900 cursor-pointer text-xl">+</button>
-              </div>
-              
-              <button 
-                onClick={handleAddToCart}
-                disabled={isAdding}
-                className="flex-grow bg-zinc-900 text-white text-[11px] font-bold uppercase tracking-[0.4em] py-5 px-10 hover:bg-red-900 transition-all duration-300 shadow-xl cursor-pointer disabled:bg-red-900"
-              >
-                {isAdding ? "Added to Cart" : "Add to Cart"}
-              </button>
+          {/* QUANTITY & ADD TO CART */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <div className="flex items-center border border-zinc-300 h-[54px] bg-white">
+              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-5 cursor-pointer hover:bg-zinc-100 h-full">−</button>
+              <span className="px-4 text-[14px] w-12 text-center">{quantity}</span>
+              <button onClick={() => setQuantity(quantity + 1)} className="px-5 cursor-pointer hover:bg-zinc-100 h-full">+</button>
             </div>
+            {/* Action Button: Now triggers handleAddToCart */}
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 bg-black hover:bg-zinc-800 text-white font-bold text-[11px] tracking-[0.3em] h-[54px] transition-colors cursor-pointer uppercase"
+            >
+              Add to cart
+            </button>
+          </div>
 
-            {/* --- RE-STYLED MESSAGE (RELATIVE POSITION) --- */}
-            <AnimatePresence>
-              {showSuccess && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full"
-                >
-                  <div className="flex items-center justify-between py-10 border-t-2 border-zinc-900">
-                    <div className="flex items-center gap-6">
-                      <div className="w-4 h-4 bg-red-800 rounded-full animate-pulse" />
-                      <p className="text-[16px] uppercase font-bold tracking-[0.3em] text-zinc-900">
-                        Item added to bag
-                      </p>
-                    </div>
-                    <div className="flex gap-12">
-                      <button onClick={() => window.location.href = '/cart'} className="text-[13px] uppercase font-bold tracking-[0.3em] text-zinc-400 hover:text-zinc-900 cursor-pointer transition-colors">
-                        View Bag
-                      </button>
-                      <button onClick={() => window.location.href = '/checkout'} className="text-[13px] uppercase font-bold tracking-[0.3em] text-red-800 hover:text-red-900 cursor-pointer border-b border-red-800 pb-1">
-                        Checkout
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <button className="w-full border border-black py-3 text-[11px] font-bold tracking-[0.3em] uppercase mb-10 hover:bg-zinc-50 transition-colors cursor-pointer bg-white">
+            Add Gift Wrapping & Note
+          </button>
+
+          {/* DESCRIPTION */}
+          <div className="space-y-6 text-[15px] leading-[1.7] text-zinc-800 font-light">
+            <p className="font-medium italic">For every morning.</p>
+            <p>{product.description}</p>
           </div>
         </div>
       </div>

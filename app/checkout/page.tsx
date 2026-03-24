@@ -134,17 +134,19 @@ function CheckoutAction({
       }
 
       // ✅ 2. 서버에서 Client Secret 가져오기
-      const response = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          amount: Math.round(totalPrice * 100), 
-          membershipType: isDonationPage ? "donation" : planName.toLowerCase(),
-          email: email,
-          firstName,
-          lastName
-        }),
-      });
+// ✅ Update the fetch call like this:
+const response = await fetch("/api/create-payment-intent", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ 
+    amount: Math.round(totalPrice * 100), 
+    // Remove .toLowerCase() to keep the capitalization WordPress expects
+    membershipType: isDonationPage ? "donation" : planName, 
+    email: email,
+    firstName,
+    lastName
+  }),
+});
 
       if (!response.ok) {
         throw new Error("Failed to create payment intent");

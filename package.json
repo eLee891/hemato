@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.0.4",
+    "@contentful/rich-text-react-renderer": "^16.1.6",
     "@fullcalendar/daygrid": "^6.1.20",
     "@fullcalendar/interaction": "^6.1.20",
     "@fullcalendar/list": "^6.1.20",
@@ -18,7 +19,7 @@
     "@stripe/react-stripe-js": "^5.6.1",
     "@stripe/stripe-js": "^8.10.0",
     "axios": "^1.13.6",
-    "contentful": "^11.10.5",
+    "contentful": "^11.12.0",
     "framer-motion": "^12.35.0",
     "graphql": "^16.13.1",
     "graphql-request": "^7.4.0",
