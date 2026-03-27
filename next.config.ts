@@ -1,17 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-
-  typescript: {
-
-    ignoreBuildErrors: true,
+  // eslint 부분은 아예 삭제하세요!
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hematoinstitute.org',
+      },
+    ],
   },
-  eslint: {
-   
-    ignoreDuringBuilds: true,
-  },
-
-  staticPageGenerationTimeout: 1200,
 };
 
 export default nextConfig;

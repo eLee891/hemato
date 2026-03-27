@@ -66,8 +66,8 @@ export default function Home() {
   return (
     <main className="relative w-full overflow-x-hidden" style={{ backgroundColor: colors.background }}>
       
-      {/* --- 1. HERO SECTION --- */}
-      <section className="relative h-screen w-full overflow-hidden bg-zinc-950">
+{/* --- 1. HERO SECTION --- */}
+      <section className="relative h-screen w-full overflow-hidden bg-zinc-950 group">
         <AnimatePresence mode="wait">
           <motion.div 
             key={current} 
@@ -100,7 +100,7 @@ export default function Home() {
                   <p className="text-[clamp(0.95rem,1.1vw,1.1rem)] max-w-xl mx-auto mb-10 font-light leading-relaxed opacity-90 tracking-wide">
                     {slides[current].description}
                   </p>
-                  <Link href={slides[current].link} className="inline-block px-12 py-4 border border-white/40 text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-[#1A2233] transition-all duration-500">
+                  <Link href={slides[current].link} className="inline-block px-12 py-4 border border-white/40 text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-white hover:text-[#1A2233] transition-all duration-500 cursor-pointer">
                     {slides[current].button}
                   </Link>
                 </motion.div>
@@ -108,10 +108,27 @@ export default function Home() {
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {/* --- NAVIGATION ARROWS --- */}
+        {/* Left Arrow */}
+        <button
+          onClick={() => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1))}
+          className="absolute left-8 top-1/2 -translate-y-1/2 z-20 p-4 text-white/50 hover:text-white transition-colors cursor-pointer focus:outline-none"
+        >
+          <span className="text-3xl font-extralight" style={{ fontFamily: '"urw-classico", serif' }}>‹</span>
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={() => setCurrent((prev) => (prev + 1) % slides.length)}
+          className="absolute right-8 top-1/2 -translate-y-1/2 z-20 p-4 text-white/50 hover:text-white transition-colors cursor-pointer focus:outline-none"
+        >
+          <span className="text-3xl font-extralight" style={{ fontFamily: '"urw-classico", serif' }}>›</span>
+        </button>
       </section>
 
-      {/* --- INTRODUCTION SECTION --- */}
-      <section className="py-32 md:py-48 px-6 md:px-12" style={{ backgroundColor: colors.background }}>
+{/* --- INTRODUCTION SECTION --- */}
+      <section className="py-32 md:py-48 px-6 md:px-12" style={{ backgroundColor: "#FFFFFF" }}>
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -120,9 +137,9 @@ export default function Home() {
             transition={{ duration: 1.2, ease: [0.215, 0.61, 0.355, 1] }}
           >
             <h2 className="text-[2.2rem] md:text-[3.8rem] font-light leading-tight mb-10 uppercase tracking-[0.15em]" 
-                style={{ color: colors.primary, fontFamily: '"urw-classico", serif' }}>
+                style={{ color: "#000000", fontFamily: '"urw-classico", serif' }}>
               Hemato Institute <br />
-              Research Institute
+              
             </h2>
           </motion.div>
 
@@ -133,8 +150,8 @@ export default function Home() {
             transition={{ duration: 1.2, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }}
           >
             <p className="text-[14px] md:text-[16px] font-light leading-[1.8] mb-20 max-w-2xl mx-auto opacity-80 uppercase tracking-[0.1em]"
-               style={{ color: colors.primary, fontFamily: '"urw-classico", serif' }}>
-              Hemato Institute is a non-profit organization that operates a 40-acre certified organic farm for its center for research and education.
+               style={{ color: "#000000", fontFamily: '"urw-classico", serif' }}>
+              Healthy blood is the key to a healthy body. Hemato Institute is a non-profit organization that operates a 40-acre certified organic farm for its center for research and education, dedicated to advancing human wellness through comprehensive research and education with a specialized focus on the vital role of healthy blood.
             </p>
           </motion.div>
 
@@ -147,154 +164,153 @@ export default function Home() {
             style={{ borderColor: "rgba(0,0,0,0.08)" }}
           >
             <span className="text-[10px] md:text-[12px] tracking-[0.6em] uppercase font-light"
-                  style={{ color: colors.primary, fontFamily: '"urw-classico", serif' }}>
-              A Leader in Regenerative Soil Research
+                  style={{ color: "#000000", fontFamily: '"urw-classico", serif' }}>
+              A CENTER FOR NATURAL HEALTH EDUCATION
             </span>
           </motion.div>
         </div>
       </section>
 
-{/* --- UPCOMING EVENTS --- */}
-      <div className="w-full px-6 md:px-12 pt-32 pb-8 flex justify-between items-end" style={{ backgroundColor: colors.background }}>
-        <h2 className="text-[20px] md:text-[22px] font-light tracking-[0.05em] uppercase opacity-90" 
-            style={{ color: colors.primary, fontFamily: '"urw-classico", serif' }}>
-          Upcoming Events & Workshops
-        </h2>
-        <div className="hidden md:flex gap-4">
-          <button 
-            onClick={() => document.getElementById('event-slider')?.scrollBy({ left: -400, behavior: 'smooth' })}
-            className="p-3 border border-[#EAE7E2] rounded-full hover:bg-white transition-all group"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={colors.primary} strokeWidth="1">
-              <path d="M19 12H5M5 12L12 19M5 12L12 5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <button 
-            onClick={() => document.getElementById('event-slider')?.scrollBy({ left: 400, behavior: 'smooth' })}
-            className="p-3 border border-[#EAE7E2] rounded-full hover:bg-white transition-all group"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={colors.primary} strokeWidth="1">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+{/* --- UPCOMING EVENTS TITLE (Pure White Background Perfect Match) --- */}
 
-      <section className="pb-12 md:pb-24 px-6 md:px-12 overflow-hidden" style={{ backgroundColor: colors.background }}>
-        <div id="event-slider" className="flex md:grid md:grid-cols-4 gap-6 md:gap-4 lg:gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-10">
-          {events.map((event) => {
-            const eventObj = new Date(event.date + '/' + new Date().getFullYear());
-            const dayName = eventObj.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
-            const monthShort = eventObj.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-            const dayNumber = eventObj.getDate();
-
-            return (
-<Link key={event.id} href={`/events/${event.slug}`} className="no-underline">
-  <motion.div className="flex-none w-[85vw] md:w-full snap-start flex flex-col group cursor-pointer">
-    
-    <div className="relative w-full aspect-[2/3] overflow-hidden rounded-lg mb-6 shadow-sm" style={{ border: `1px solid ${colors.border}` }}>
-      {/* 🚨 FIX: Ensure this matches your library (event.image vs event.imageUrl) */}
-      <img 
-        src={event.image || event.imageUrl} 
-        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[4s] ease-out" 
-        alt={event.title}
-      />
+<div className="py-24 md:py-32 bg-white" style={{ backgroundColor: "#FFFFFF" }}>
+  <div className="max-w-5xl mx-auto text-center">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.2, ease: [0.215, 0.61, 0.355, 1] }}
+    >
+      <h2 className="text-[2.2rem] md:text-[3.8rem] font-light uppercase tracking-[0.2em] leading-tight text-black" 
+          style={{ fontFamily: '"urw-classico", serif' }}>
+        Upcoming Events
+      </h2>
       
-      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-700" />
-      
-      <div className="absolute top-[50%] left-10 right-10 transform -translate-y-[50%] text-center">
-        <h3 className="text-[1.8rem] font-extralight leading-tight text-white uppercase tracking-[0.15em]" style={{ fontFamily: '"urw-classico", serif' }}>
-          {event.title}
-        </h3>
-      </div>
+      {/* 타이틀 아래 아주 얇은 구분선 (선택 사항: image_3f9e22 느낌) */}
+      <div className="mt-12 w-12 border-t border-black/20 mx-auto" />
+    </motion.div>
+  </div>
+</div>
 
-      <div className="absolute bottom-8 left-10 right-10 flex justify-between text-white/90 text-[9px] font-light tracking-[0.2em]" style={{ fontFamily: '"urw-classico", serif' }}>
-        <span className="uppercase font-medium">Workshop</span>
-        <span className="uppercase">{dayName} {monthShort} {dayNumber}</span>
-      </div>
-    </div>
+{/* EVENT SLIDER SECTION */}
+<section className="pb-12 md:pb-24 px-6 md:px-12 overflow-hidden" style={{ backgroundColor: "#FFFFFF" }}>
+  <div id="event-slider" className="flex md:grid md:grid-cols-4 gap-6 md:gap-4 lg:gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-10">
+    {events.map((event) => {
+      const eventObj = new Date(event.date + '/' + new Date().getFullYear());
+      const dayName = eventObj.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+      const monthShort = eventObj.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+      const dayNumber = eventObj.getDate();
 
-    {/* 🚨 FIX: Removed 'href' from the div because the whole card is already a Link */}
-    <div className="w-full py-4 px-6 text-[10px] font-light tracking-[0.4em] uppercase text-center" 
-         style={{ border: `1px solid ${colors.border}`, color: colors.secondary, fontFamily: '"urw-classico", serif' }}>
-      View Details →
-    </div>
-
-  </motion.div>
-</Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* --- REFINED MEMBERSHIP & DONATE SECTION --- */}
-      <section className="py-24 md:py-40 px-6 md:px-12 lg:px-24" style={{ backgroundColor: colors.background }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-y-32">
+      return (
+        <Link key={event.id} href={`/events/${event.slug}`} className="no-underline">
+          <motion.div className="flex-none w-[85vw] md:w-full snap-start flex flex-col group cursor-pointer">
             
-            {/* 1. MEMBERSHIP */}
-            <div className="md:col-span-5 flex flex-col">
-              <div className="aspect-[4/5] w-full mb-10 rounded-sm overflow-hidden group relative">
-                <img 
-                  src="/member.jpg" 
-                  alt="Membership" 
-                  className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[3s] ease-out" 
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
-              </div>
-              <div className="max-w-xs">
-                <span className="text-[10px] tracking-[0.5em] uppercase font-light opacity-50 mb-4 block">
-                  Community
-                </span>
-                <h3 className="text-[54px] md:text-[64px] font-medium leading-[1.1] mb-6" 
-                    style={{ fontFamily: '"Cormorant Garamond", serif', color: colors.primary }}>
-                  Membership
+            {/* IMAGE CARD */}
+            <div className="relative w-full aspect-[2/3] overflow-hidden rounded-lg shadow-sm" style={{ border: `1px solid rgba(0,0,0,0.05)` }}>
+              <img 
+                src={event.image || event.imageUrl} 
+                className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[4s] ease-out" 
+                alt={event.title}
+              />
+              
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-700" />
+              
+              <div className="absolute top-[50%] left-10 right-10 transform -translate-y-[50%] text-center">
+                <h3 className="text-[1.8rem] font-extralight leading-tight text-white uppercase tracking-[0.15em]" style={{ fontFamily: '"urw-classico", serif' }}>
+                  {event.title}
                 </h3>
-                <p className="text-[15px] leading-relaxed font-light opacity-60 mb-10">
-                  Join our community and help us build a lasting relationship with the land through soil research.
-                </p>
-                <Link href="/membership" className="inline-block border border-black px-10 py-5 text-[10px] tracking-[0.25em] uppercase hover:bg-black hover:text-white transition-all duration-500">
-                  Become a Member
-                </Link>
+              </div>
+
+              <div className="absolute bottom-8 left-10 right-10 flex justify-between text-white/90 text-[9px] font-light tracking-[0.2em]" style={{ fontFamily: '"urw-classico", serif' }}>
+                <span className="uppercase font-medium">Workshop</span>
+                <span className="uppercase">{dayName} {monthShort} {dayNumber}</span>
               </div>
             </div>
+          </motion.div>
+        </Link>
+      );
+    })}
+  </div>
+
+{/* --- VIEW MORE EVENTS BUTTON --- */}
+<div className="w-full flex justify-center mt-12 mb-20">
+  <Link href="/events" className="no-underline">
+    {/* cursor-pointer 클래스를 추가했습니다 */}
+    <button className="px-12 py-4 border border-black text-[11px] tracking-[0.5em] uppercase font-light hover:bg-black hover:text-white cursor-pointer transition-all duration-500"
+            style={{ fontFamily: '"urw-classico", serif' }}>
+      View More Events
+    </button>
+  </Link>
+</div>
+
+  {/* BOTTOM DIVIDER LINE */}
+  <div className="w-full max-w-5xl mx-auto border-t mt-20" style={{ borderColor: "rgba(0,0,0,0.08)" }} />
+</section>
+{/* --- MEMBERSHIP & DONATE SECTION (Hand Cursor Fix) --- */}
+      <section className="py-32 md:py-48 px-6 md:px-12" style={{ backgroundColor: "#FFFFFF" }}>
+        <div className="max-w-6xl mx-auto">
+          
+          <div className="relative flex flex-col md:flex-row items-stretch">
+            
+            {/* 1. MEMBERSHIP */}
+            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-16 justify-between">
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] tracking-[0.5em] uppercase font-light text-zinc-400 mb-8"
+                      style={{ fontFamily: '"urw-classico", serif' }}>
+                  01 — Community
+                </span>
+                <h2 className="text-[2.2rem] md:text-[3.2rem] font-light leading-tight mb-8 uppercase tracking-[0.2em] text-black" 
+                    style={{ fontFamily: '"urw-classico", serif' }}>
+                  Membership
+                </h2>
+                <p className="text-[12px] md:text-[14px] font-light leading-relaxed mb-16 max-w-[280px] opacity-60 uppercase tracking-[0.1em]"
+                   style={{ fontFamily: '"urw-classico", serif' }}>
+                  Become a member today and save every time you shop or learn.
+                </p>
+              </div>
+
+              {/* Added cursor-pointer here */}
+              <Link href="/membership" className="no-underline cursor-pointer">
+                <button className="px-12 py-5 border border-black text-[10px] tracking-[0.4em] uppercase font-light hover:bg-black hover:text-white transition-all duration-500 cursor-pointer"
+                        style={{ fontFamily: '"urw-classico", serif' }}>
+                  Join Membership
+                </button>
+              </Link>
+            </div>
+
+            {/* VERTICAL DIVIDER */}
+            <div className="hidden md:block h-auto w-[1px]" style={{ backgroundColor: "rgba(0,0,0,0.08)" }} />
 
             {/* 2. DONATION */}
-            <div className="md:col-span-6 md:col-start-7 flex flex-col">
-              <div className="aspect-[1.2/1] w-full mb-10 rounded-sm overflow-hidden group relative">
-                <img 
-                  src="/donate.jpeg" 
-                  alt="Donate" 
-                  className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[3s] ease-out" 
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+            <div className="flex-1 flex flex-col items-center text-center px-6 md:px-16 mt-32 md:mt-0 justify-between">
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] tracking-[0.5em] uppercase font-light text-zinc-400 mb-8"
+                      style={{ fontFamily: '"urw-classico", serif' }}>
+                  02 — Impact
+                </span>
+                <h2 className="text-[2.2rem] md:text-[3.2rem] font-light leading-tight mb-8 uppercase tracking-[0.2em] text-black" 
+                    style={{ fontFamily: '"urw-classico", serif' }}>
+                  Donation
+                </h2>
+                <p className="text-[12px] md:text-[14px] font-light leading-relaxed mb-16 max-w-[280px] opacity-60 uppercase tracking-[0.1em]"
+                   style={{ fontFamily: '"urw-classico", serif' }}>
+                  SUPPORT A HEALTHIER FUTURE FOR US AND OUR PLANET
+                </p>
               </div>
-              <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-                <div className="flex-1">
-                  <span className="text-[10px] tracking-[0.5em] uppercase font-light opacity-50 mb-4 block">
-                    Impact
-                  </span>
-                  <h3 className="text-[54px] md:text-[64px] font-medium leading-[1.1]" 
-                      style={{ fontFamily: '"Cormorant Garamond", serif', color: colors.primary }}>
-                    Donation
-                  </h3>
-                </div>
-                <div className="max-w-[280px] md:pt-14">
-                  <p className="text-[14px] leading-relaxed font-light opacity-60 mb-10">
-                    A one-time gift to fuel our soil research and workshop initiatives. Your support sustains our mission.
-                  </p>
-                  <Link href="/donate" className="inline-block border border-black px-10 py-5 text-[10px] tracking-[0.25em] uppercase hover:bg-black hover:text-white transition-all duration-500">
-                    Contribute Now
-                  </Link>
-                </div>
-              </div>
+
+              {/* Added cursor-pointer here */}
+              <Link href="/donate" className="no-underline cursor-pointer">
+                <button className="px-12 py-5 border border-black text-[10px] tracking-[0.4em] uppercase font-light hover:bg-black hover:text-white transition-all duration-500 cursor-pointer"
+                        style={{ fontFamily: '"urw-classico", serif' }}>
+                  Donate Now
+                </button>
+              </Link>
             </div>
 
           </div>
         </div>
       </section>
 
-      <div className="pb-32" style={{ backgroundColor: colors.background }} />
     </main>
   );
 }

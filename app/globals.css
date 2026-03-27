@@ -102,3 +102,7 @@ nav a {
 .elegant-link:hover {
   border-bottom-color: var(--hemato-red);
 }
+
+button {
+  cursor: pointer;
+}
