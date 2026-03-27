@@ -95,7 +95,7 @@ export default function ShopCheckoutPage() {
           <div className="bg-zinc-100 p-10 sticky top-32 border border-zinc-200">
             <h2 className="text-[14px] font-bold uppercase tracking-widest mb-10 border-b border-zinc-300 pb-4">Summary</h2>
             <div className="space-y-6 mb-10">
-              {cart.map((item) => (
+              {cart.map((item: any) => (
                 <div key={item.cartId} className="flex justify-between items-start text-[12px] uppercase tracking-wider">
                   <div className="flex flex-col gap-1">
                     <span className="font-bold text-black">{item.title} x{item.quantity}</span>
